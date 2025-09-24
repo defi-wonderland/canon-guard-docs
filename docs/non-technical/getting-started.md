@@ -26,13 +26,31 @@ In order to deploy Canon Guard, you need to have a SAFE Wallet deployed in the c
 7) Once all signers of the SAFE approved the transaction, it can be executed by calling `executeTransaction` passing `SetGuardAction` as parameter. ([See more executing](#executing-a-transaction))
 
 ### Approving an action builder or hub
-TODO
+
+Approving an action builder or hub will allow the transactions included in the contract to have a short timelock. When approving a hub, all hub children will be approved by default. The process is the next one:
+
+1) Select the desired action builder or hub.
+2) Deploy a new `ApproveAction` using the `ApproveActionFactory` method `createApproveAction`. Passing the action builder to approve as the first parameter and the duration as the second. The duration is the time in seconds until the approval expires, it must not surpass the `_maxApprovalDuration` set in the deployment.
+3) Queue the deployed `ApproveAction` action builder. Given that is not pre-approved, it will go for the long delay path.
+4) Sign the transaction hash in the SAFE.
+5) Execute the transaction.
 
 ### Queueing a transaction
-TODO
+
+This process will add a transaction to the queue, making it available for signing. In order to queue you will need an action builder. It can be pre-approved or not.
+
+1) Call the Canon Guard method `queueTransaction` with the desired action-builder. The caller must be a SAFE signer.
+2) After this the transaction will be available for signing.
 
 ### Executing a transaction
-TODO
+
+Executing a transaction will interact with the SAFE with the given actions. In order to execute a transaction it must be previously queued, signed and not expired. Any account (even someone that is not a signer) can call this method.
+
+1) Call the Canon Guard method `executeTransaction` (single transactions) or `executeTransactions` (multiple transactions) with the action builder as parameter.
 
 ### Signing a hash
-TODO
+
+Signing (or approving) a hash in the SAFE with a given nonce will provide a signature to reach the threshold needed to execute a transaction.
+
+1) Get the safe transaction hash of the desired transaction by calling `getSafeTransactionHash` with the action builder as parameter.
+2) Use that hash to call `approveHash` in the SAFE wallet (not in Canon Guard).
