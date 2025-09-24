@@ -19,4 +19,4 @@ Canon Guard works as the first line of defense for a SAFE Wallet.
 Does not matter if you understand Solidity or not, it is recommended to start by reading the non-technical docs:
 
 - [Non-technical docs](non-technical/getting-started.md)
-- [Technical docs](technical/)
+- [Technical docs](intro.md)
