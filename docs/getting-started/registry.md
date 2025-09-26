@@ -1,0 +1,37 @@
+---
+sidebar_position: 3
+---
+
+# Registry
+
+## Important addresses
+
+### Factories
+
+| Contract | Address |
+| -------- | ------- |
+| CanonGuardFactory | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| AllowanceClaimorFactory | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| ApproveActionFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| CappedTokenTransfersHubFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| ChangeSafeGuardActionFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| DisapproveActionFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| SetEmergencyCallerActionFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| SetEmergencyTriggerActionFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| SimpleActionsFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| SimpleTransfersFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+
+### Wonder related factories
+
+| Contract | Address |
+| -------- | ------- |
+| EverclearTokenConversionFactory | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| EverclearTokenStakeFactory | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| OPxActionFactory    | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+
+### Universal action-builders
+
+| Contract | Address |
+| -------- | ------- |
+| SetGuardAction | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
+| UnsetEmergencyModeAction | [0x0000000000000000000000000000000000000001](https://optimistic.etherscan.io/address/0x0000000000000000000000000000000000000001) |
