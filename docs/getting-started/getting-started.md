@@ -50,3 +50,29 @@ If the process is successful, the system will output the address of the deployed
 
 1) Grab the address of the action builder you want to sign. Or input zero if planning to execute a no-action transaction.
 2) Call `pnpm signTransaction`.
+
+### Execute no-action transaction
+
+1) Gather the required signatures by making all the signers call `pnpm signTransaction`, passing zero as the action builder address.
+2) Call `pnpm executeNoActionTransaction`.
+
+### Cancel enqueued transaction
+
+1) Grab the address of the action builder you want to cancel. You must be the proposer and the tx must have no signers.
+2) Call `pnpm cancelEnqueuedTransaction`.
+
+### Deploy simpleTransfer action
+
+TODO
+
+### Deploy simpleAction action
+
+TODO
+
+### Deploy CappedTokenTransferHub
+
+TODO
+
+## Deploy CappedTokenTransfer
+
+TODO
