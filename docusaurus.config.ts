@@ -42,9 +42,13 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          routeBasePath: '/'
+          routeBasePath: '/docs'
         },
         blog: false,
+        pages: {
+          path: 'src/pages',
+          routeBasePath: '/',
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -52,18 +56,53 @@ const config: Config = {
     ],
   ],
 
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect', 
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        href: 'https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap',
+        rel: 'stylesheet',
+      },
+    },
+  ],
+
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/canon-social-card.jpg',
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: true,
+      respectPrefersColorScheme: false,
+    },
     navbar: {
-      title: 'Canon Guard Docs',
+      title: 'Canon Guard',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Canon Guard Logo',
+        src: 'img/hero/canon-guard-logo.svg',
       },
       items: [
         {
-          href: 'https://github.com/facebook/docusaurus',
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          position: 'left',
+          label: 'Docs',
+        },
+        {
+          href: 'https://github.com/defi-wonderland/canon-guard',
           label: 'GitHub',
           position: 'right',
         },
@@ -73,25 +112,46 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Community',
+          title: 'Documentation',
           items: [
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Getting Started',
+              to: '/docs/getting-started/getting-started',
+            },
+            {
+              label: 'Concepts',
+              to: '/docs/concepts/canon-in-a-nutshell',
+            },
+            {
+              label: 'FAQ',
+              to: '/docs/getting-started/FAQ',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Community',
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/defi-wonderland/canon-guard',
+            },
+          ],
+        },
+        {
+          title: 'Wonderland',
+          items: [
+            {
+              label: 'Website',
+              href: 'https://wonderland.xyz',
+            },
+            {
+              label: 'Handbook',
+              href: 'https://handbook.wonderland.xyz',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Wonderland, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Wonderland. Your final line of defense.`,
     },
     prism: {
       theme: prismThemes.github,
