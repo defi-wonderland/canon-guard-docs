@@ -63,16 +63,21 @@ If the process is successful, the system will output the address of the deployed
 
 ### Deploy simpleTransfer action
 
-TODO
+1) Grab the token address, the amount and the recipient.
+2) Call `pnpm deploySimpleTransfer`.
 
 ### Deploy simpleAction action
 
-TODO
+1) Grab the contract address you want to interact with, and the selector. ABI-encode the calldata using `cast abi-encode` or a page like [Hashex](https://abi.hashex.org/).
+2) Call `pnpm deploySimpleAction`.
 
 ### Deploy CappedTokenTransferHub
 
-TODO
+1) Grab the token address, the amount and the recipient you want to cap the transfers.
+2) Call `pnpm deployCappedTokenTransferHub`.
 
 ## Deploy CappedTokenTransfer
 
-TODO
+1) Grab the address of the deployed CappedTokenTransferHub
+2) Call `pnpm deployCappedTokenTransfer`.
+3) Select the amount you want to transfer, it should not exceed the cap set in the hub.
