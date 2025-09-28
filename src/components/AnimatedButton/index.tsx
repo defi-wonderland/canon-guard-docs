@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from '@docusaurus/Link';
+import {useHistory} from '@docusaurus/router';
 
 interface AnimatedButtonProps {
   to?: string;
@@ -15,6 +16,7 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
   children, 
   disclaimer = "Secure your multisig today" 
 }) => {
+  const history = useHistory();
   const ButtonContent = () => (
     <StyledWrapper>
       <div className="btn-wrapper">
@@ -29,7 +31,24 @@ const AnimatedButton: React.FC<AnimatedButtonProps> = ({
 
   if (to) {
     return (
-      <Link to={to} style={{ textDecoration: 'none' }}>
+      <Link
+        to={to}
+        style={{ textDecoration: 'none' }}
+        onClick={(e) => {
+          try {
+            e.preventDefault();
+            document.body.classList.add('cg-leave');
+            window.setTimeout(() => {
+              history.push(to);
+              window.setTimeout(() => {
+                document.body.classList.remove('cg-leave');
+              }, 250);
+            }, 320);
+          } catch (_err) {
+            // fallback to default navigation
+          }
+        }}
+      >
         <ButtonContent />
       </Link>
     );

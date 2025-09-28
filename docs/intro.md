@@ -6,12 +6,7 @@ slug: /
 # Canon Guard
 
 ## Overview
-```solidity
-interface ICappedTokenTransfersHub is ISafeManageable {
-    //...
-}
 
-```
 The objective of Canon Guard is to improve the security of the multi-sig account, specifically designed for Gnosis SAFE multi-sig, although a similar logic could be applied for other types. The main pain-points (from a security perspective) to improve are:
 
 - **Off-chain dependencies**: Gnosis flow relies strongly on their backend DB in order to coordinate the collection and storage of off-chain signatures, in order to display to the Signer the activity of the other Signers, to know if the action is ready to be executed or not.

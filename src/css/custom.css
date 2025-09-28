@@ -409,6 +409,29 @@ html, body {
   box-sizing: border-box;
 }
 
+/* Smooth content reveal after intro loader */
+.cg-content-reveal {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(0.985);
+  transition: opacity 600ms ease-out, filter 700ms ease-out, transform 700ms ease-out;
+}
+
+.cg-content-reveal--visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: scale(1);
+}
+
+/* Page leave transition when clicking Get Started */
+body.cg-leave .homepage-container .main-wrapper,
+body.cg-leave .homepage-container .navbar,
+body.cg-leave .homepage-container .footer {
+  transition: opacity 300ms ease, transform 320ms ease;
+  opacity: 0;
+  transform: translateY(8px) scale(0.99);
+}
+
 [data-page="/"]:has(.homepage-container) body {
   padding: 0 !important;
   margin: 0 !important;
@@ -675,6 +698,8 @@ h2::after {
   border-radius: 8px;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
+  position: relative;
+  overflow: visible;
 }
 
 .menu__link:hover {
@@ -686,9 +711,64 @@ h2::after {
 
 .menu__link--active {
   color: #FB3800 !important;
-  background: rgba(251, 56, 0, 0.15) !important;
-  border-left-color: #FB3800;
+  background: transparent !important;
+  border-left-color: rgba(251, 56, 0, 0.9);
   font-weight: 600;
+  text-shadow: none !important;
+}
+
+/* Glowing left rail for active link */
+.menu__link--active::before {
+  display: none !important;
+}
+
+/* Animated underline for hover/active */
+.menu__link::after {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 4px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(251,56,0,0), rgba(251,56,0,0.6) 40%, rgba(251,56,0,0.6) 60%, rgba(251,56,0,0));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 160ms ease-in-out;
+}
+
+.menu__link:hover::after { transform: scaleX(1); }
+.menu__link--active::after { transform: scaleX(0); }
+
+/* ---------------------------------------------
+   Docs: subtle entrance animation on first paint
+---------------------------------------------- */
+.theme-doc-markdown {
+  opacity: 0;
+  transform: translateY(8px) scale(0.995);
+  filter: blur(6px);
+  animation: cgDocFade 520ms cubic-bezier(0.22, 1, 0.36, 1) 60ms forwards;
+}
+
+.theme-doc-breadcrumbs,
+.breadcrumbs {
+  opacity: 0;
+  transform: translateY(4px);
+  filter: blur(4px);
+  animation: cgDocFade 420ms ease-out 20ms forwards;
+}
+
+.pagination-nav {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: cgDocFade 520ms ease-out 220ms forwards;
+}
+
+@keyframes cgDocFade {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
 }
 
 /* Simple category styling that actually works */
