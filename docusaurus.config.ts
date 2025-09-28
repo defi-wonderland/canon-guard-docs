@@ -101,11 +101,6 @@ const config: Config = {
           position: 'left',
           label: 'Docs',
         },
-        {
-          href: 'https://github.com/defi-wonderland/canon-guard',
-          label: 'GitHub',
-          position: 'right',
-        },
       ],
     },
     footer: {
@@ -129,7 +124,7 @@ const config: Config = {
           ],
         },
         {
-          title: 'Community',
+          title: 'Quick Links',
           items: [
             {
               label: 'GitHub',
@@ -151,7 +146,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Wonderland. Your final line of defense.`,
+      copyright: `Made with 🧡 by Wonderland - ${new Date().getFullYear()}`,
     },
     prism: {
       theme: prismThemes.github,

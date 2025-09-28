@@ -118,8 +118,8 @@ body:has(.homepage-container) {
 
 /* Navbar styling - floating like button */
 .navbar {
-  background: linear-gradient(#ffffff08, #00000030), rgba(12, 12, 12, 0.7) !important;
-  border: none;
+  background: linear-gradient(#ffffff05, #00000040), rgba(12, 12, 12, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   backdrop-filter: blur(20px);
   font-family: 'Space Mono', monospace !important;
@@ -135,6 +135,8 @@ body:has(.homepage-container) {
     1px 1px 2px 0 #ffffff08,
     2px 2px 2px #FB380015 inset,
     2px 2px 4px #FB380010 inset,
+    -2px -2px 2px #FB380015 inset,
+    -2px -2px 4px #FB380010 inset,
     0 2px 4px rgba(0, 0, 0, 0.2),
     0 4px 8px rgba(0, 0, 0, 0.15);
     
@@ -144,6 +146,10 @@ body:has(.homepage-container) {
 
 .navbar__brand {
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
 }
 
 .navbar__title {
@@ -151,10 +157,86 @@ body:has(.homepage-container) {
   font-family: 'Space Mono', monospace !important;
   font-weight: 700;
   transition: color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  position: relative;
+  /* hide original single-line text but keep for a11y */
+  color: transparent !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  /* Prevent original text node from affecting layout */
+  font-size: 0 !important;
 }
 
-.navbar__title:hover {
-  color: #FB3800 !important;
+/* Remove truncation so two-line brand renders fully */
+.navbar__title.text--truncate {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  max-width: none !important;
+}
+
+.navbar__title:hover { color: transparent !important; }
+.navbar__title::before {
+  content: 'CANON\A GUARD';
+  white-space: pre;
+  display: block;
+  color: #DEDEDE;
+  line-height: 0.95;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.navbar__brand:hover .navbar__title::before,
+.navbar__brand:focus-visible .navbar__title::before {
+  color: #FB3800;
+}
+
+/* Sidebar brand two-line title */
+.navbar-sidebar__brand .navbar__title {
+  position: relative;
+  color: transparent !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1;
+  font-size: 0 !important;
+}
+
+.navbar-sidebar__brand .navbar__title::before {
+  content: 'CANON\A GUARD';
+  white-space: pre;
+  display: block;
+  color: #DEDEDE;
+  line-height: 0.95;
+  text-align: left;
+  font-size: 1.1rem;
+}
+
+.navbar-sidebar__brand:hover .navbar__title::before,
+.navbar-sidebar__brand:focus-visible .navbar__title::before {
+  color: #FB3800;
+}
+
+/* Smoothly tint the logo to Canon orange on hover/focus of brand */
+.navbar__logo {
+  transition: filter 0.3s ease, transform 0.2s ease;
+  display: block;
+}
+
+.navbar__brand:hover .navbar__logo,
+.navbar__brand:focus-visible .navbar__logo {
+  /* CSS filter to approximate #FB3800 */
+  filter: brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(2740%) hue-rotate(2deg) brightness(101%) contrast(106%);
+}
+
+/* Apply the same tint effect inside the mobile sidebar */
+.navbar-sidebar__brand:hover .navbar__logo,
+.navbar-sidebar__brand:focus-visible .navbar__logo {
+  filter: brightness(0) saturate(100%) invert(36%) sepia(96%) saturate(2740%) hue-rotate(2deg) brightness(101%) contrast(106%);
 }
 
 .navbar__link {
@@ -165,12 +247,23 @@ body:has(.homepage-container) {
   position: relative;
   padding: 0.5rem 1rem;
   border-radius: 8px;
+  border: 1px solid transparent;
+  box-shadow: none;
 }
 
 .navbar__link:hover,
 .navbar__link--active {
   color: #FB3800 !important;
   background: rgba(251, 56, 0, 0.1);
+  border-color: rgba(251, 56, 0, 0.35);
+  box-shadow:
+    1px 1px 2px 0 #ffffff08,
+    2px 2px 2px #FB380015 inset,
+    2px 2px 4px #FB380010 inset,
+    -2px -2px 2px #FB380015 inset,
+    -2px -2px 4px #FB380010 inset,
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .navbar__link::after {
