@@ -115,16 +115,16 @@ const config: Config = {
           title: 'Documentation',
           items: [
             {
-              label: 'Getting Started',
-              to: '/docs/getting-started/getting-started',
+              label: 'Introduction',
+              to: '/docs/',
             },
             {
-              label: 'Concepts',
-              to: '/docs/concepts/canon-in-a-nutshell',
+              label: 'Glossary',
+              to: '/docs/concepts/glossary',
             },
             {
-              label: 'FAQ',
-              to: '/docs/getting-started/FAQ',
+              label: 'Registry',
+              to: '/docs/getting-started/registry',
             },
           ],
         },
