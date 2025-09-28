@@ -1003,3 +1003,73 @@ td {
     border-radius: 12px;
   }
 }
+
+/* ------------------------------------------------------------
+   Mobile readability & overflow fixes
+   - Smaller headings/body on small screens
+   - Add right padding so text doesn’t touch the edge
+   - Prevent long tokens from overflowing the viewport
+------------------------------------------------------------- */
+@media (max-width: 600px) {
+  /* Global content spacing */
+  .theme-doc-page-wrapper {
+    padding: 0.75rem;
+  }
+
+  .container {
+    /* previously only left padding; add symmetric padding on mobile */
+    padding: 0 0.75rem !important;
+  }
+
+  .theme-doc-markdown,
+  article {
+    padding: 0 0.5rem;
+  }
+
+  /* Typography scale down */
+  h1 { font-size: 1.75rem !important; line-height: 1.2 !important; }
+  h2 { font-size: 1.35rem !important; line-height: 1.25 !important; }
+  h3 { font-size: 1.1rem !important;  line-height: 1.35 !important; }
+  article p,
+  article li { font-size: 0.95rem; line-height: 1.65; }
+
+  /* Code blocks a bit tighter on mobile */
+  .prism-code,
+  pre[class*="language-"] {
+    padding: 1rem !important;
+    margin: 1rem 0 !important;
+    font-size: 0.8rem !important;
+  }
+
+  code { font-size: 0.8em !important; }
+
+  /* Keep back-to-top away from pagination on small screens */
+  [class*="backToTopButton"] {
+    bottom: 5.5rem !important;
+    right: 0.75rem !important;
+    z-index: 1002 !important;
+  }
+
+  /* When pagination is present, place it above the Next card */
+  body:has(.pagination-nav) [class*="backToTopButton"] {
+    bottom: 10rem !important;
+  }
+
+  /* Provide breathing room below pagination cards */
+  .pagination-nav {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Break long words/URLs to avoid horizontal scroll on narrow screens */
+.theme-doc-markdown,
+article {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Default back-to-top placement on larger screens */
+[class*="backToTopButton"] {
+  bottom: 1rem !important;
+  right: 1rem !important;
+}
