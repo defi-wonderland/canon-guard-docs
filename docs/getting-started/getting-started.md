@@ -25,7 +25,38 @@ In order to deploy Canon Guard, you need to have a [SAFE Wallet](https://app.saf
     - Emergency trigger address ([See glossary](../concepts/glossary.md#emergency-trigger)): another multisig is recommended.
     - Emergency caller address ([See glossary](../concepts/glossary.md#emergency-caller)): another multisig is recommended.
 
-If the process is successful, the system will output the address of the deployed Canon Guard and the action builder, save them.
+If the process is successful, the system will output the address of the deployed Canon Guard and the action builder, save them. An example output will look like this: 
+
+```
+How long in seconds should you SHORT execution delay be? In seconds: 3600
+How long in seconds should you LONG execution delay be? In seconds: 604800
+From the moment a transaction is executable, how long until it expires? In seconds: 604800
+What should be the maximum approval duration? In seconds: 126227808
+Who should be the emergency trigger?: 0x80B0b49ed8Bfb0b879FbDd8c6A211E5Aa9A050C6
+Who should be the emergency caller?: 0x80B0b49ed8Bfb0b879FbDd8c6A211E5Aa9A050C6
+Enter keystore password:
+Canon guard and set guard action successfully deployed. Would you like to enqueue the action into your Canon guard? y/(N): y
+Transaction successfully queued. Would you like to approve this transaction in your Safe? y/(N): y
+Script ran successfully.
+Gas used: 3814893
+
+== Logs ==
+  Signer: 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38
+  Safe: 0xA55A50CD0038F128e577fcf7B8D1232ED98d3F17
+  Safe threshold: 1
+  Canon guard: 0x0000000000000000000000000000000000000000
+  Canon guard deployed to: 0x7278227C6108801f3118Ad250b42Ed0059e47D6c
+  Set guard simple action deployed to: 0xd0f5D793825A54FC9F24Dd179Ab8e1602da976A1
+  Your transaction will be executable in 604800 seconds
+  Watch out, your transaction will also expire in 604800 seconds
+  You can execute the transaction via the executeTransaction script
+  Detached Canon guard: 0x7278227C6108801f3118Ad250b42Ed0059e47D6c
+  Action builder: 0xd0f5D793825A54FC9F24Dd179Ab8e1602da976A1
+
+## Setting up 1 EVM.
+
+==========================
+```
 
 7) While you wait for the long execution delay process, collect the required signatures. See more on the sign process [here](#signing-a-hash).
 8) Now call `pnpm executeTransaction` and when prompted use the detached mode and enter the Canon Guard address and the action builder. See more on the `executeTransaction` process [here](#executing-a-transaction).
