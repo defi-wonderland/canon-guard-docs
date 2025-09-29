@@ -738,7 +738,7 @@ h2::after {
   right: -1px;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: 0.3px;
   background: linear-gradient(180deg, 
     rgba(251, 56, 0, 0.8) 0%, 
     rgba(251, 56, 0, 1) 50%, 
