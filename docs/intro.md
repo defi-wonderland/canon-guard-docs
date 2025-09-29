@@ -8,6 +8,10 @@ title: Canon Guard
 
 For most organizations, Safe is the right choice and works beautifully. Then comes the week you move eight figures and suddenly good UX isn’t the same as good risk. The assumptions that work for small DAOs (lightweight coordination, off‑chain convenience, human vigilance) start to creak under institutional weight.
 
+<!-- ::: note Reference
+If this is the first time you hear about Safe, check [Gnosis Safe]() and [Safe Guards]().
+::: -->
+
 When signatures and status live off‑chain, there’s a fog. A compromised frontend or coordination layer can make reality diverge from what signers see. You don’t notice until the threshold is met and the transaction sails through. [We’ve seen how that story can end.](https://rekt.news/not-so-safe)
 
 At scale, the five dollar wrench stops being a meme and becomes an operating assumption. If multiple signers are pressured at the same time, the “independent, freely acting signer” model breaks. Maybe temporarily, but long enough to matter. 
@@ -30,11 +34,13 @@ And if the worst day shows up there’s a big red switch called emergency mode. 
 
 ![](../static/img/diagrams/emergency.png)
 
-As a summary, what changes here is:
+As a summary, what changes here is that:
 
 - Approvals are onchain, where everyone can see them.
 - Payloads are immutable once queued, so what you simulate is what will run.
 - Time does a lot of the security work: short delays for pre‑approved, long delays for everything else.
 - When in doubt, you can always spend a Safe nonce with a no‑op to clear stale signatures.
 
-Canon Guard makes the default path safer without slowing the happy path. Next, we’ll get technical: components, timelocks, hubs vs builders, emergency controls. For now, remember: actions are addresses, approvals are onchain, time is your ally.
+Canon Guard makes the default path safer without slowing the happy path. In the [Concepts section](./concepts/canon-in-a-nutshell.md), we’ll get technical: components, timelocks, hubs vs builders, emergency controls. If you are willing to try it out, go directly to [Getting Started](./getting-started/getting-started.md). 
+
+**For now, remember: actions are addresses, approvals are onchain, time is your ally.**
