@@ -30,13 +30,11 @@ And if the worst day shows up there’s a big red switch called emergency mode. 
 
 ![](../static/img/diagrams/emergency.png)
 
-Here’s how it feels with guardrails:
+As a summary, what changes here is:
 
 - Approvals are onchain, where everyone can see them.
 - Payloads are immutable once queued, so what you simulate is what will run.
 - Time does a lot of the security work: short delays for pre‑approved, long delays for everything else.
 - When in doubt, you can always spend a Safe nonce with a no‑op to clear stale signatures.
 
-Canon Guard makes the default path safer without slowing the happy path. You keep your Safe. You keep your muscle memory. You just lose the blind spots.
-
-Next, we’ll get technical: components, timelocks, hubs vs builders, emergency controls. For now, remember: actions are addresses, approvals are onchain, time is your ally.
+Canon Guard makes the default path safer without slowing the happy path. Next, we’ll get technical: components, timelocks, hubs vs builders, emergency controls. For now, remember: actions are addresses, approvals are onchain, time is your ally.
