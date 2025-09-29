@@ -16,12 +16,12 @@ In order to deploy Canon Guard, you need to have a [SAFE Wallet](https://app.saf
 4) Import the signers private key: `cast wallet import canon-guard-tester --interactive`.
 5) Install the dependencies: `pnpm install`. 
 6) Start the setup process: `pnpm setupGuard`. This will interactively guide you into the deploy process of your Canon Guard, you will need:
-    - short execution delay ([See glossary](../concepts/glossary.md#short-execution-delay)): recommended value is 1 hour (3600).
-    - long execution delay process ([See glossary](../concepts/glossary.md#long-execution-delay)): recommended value is 7 days (604800).
-    - transaction expiry delay ([See glossary](../concepts/glossary.md#transaction-expiry-delay)): recommended value is 7 days (604800).
-    - maximum approval duration ([See glossary](../concepts/glossary.md#maximum-approval-duration)): recommended value is 7 days (126227808).
-    - emergency trigger address ([See glossary](../concepts/glossary.md#emergency-trigger)): another multisig is recommended.
-    - emergency caller address ([See glossary](../concepts/glossary.md#emergency-caller)): another multisig is recommended.
+    - Short execution delay ([See glossary](../concepts/glossary.md#short-execution-delay)): recommended value is 1 hour (3600).
+    - Long execution delay process ([See glossary](../concepts/glossary.md#long-execution-delay)): recommended value is 7 days (604800).
+    - Transaction expiry delay ([See glossary](../concepts/glossary.md#transaction-expiry-delay)): recommended value is 7 days (604800).
+    - Maximum approval duration ([See glossary](../concepts/glossary.md#maximum-approval-duration)): recommended value is 7 days (126227808).
+    - Emergency trigger address ([See glossary](../concepts/glossary.md#emergency-trigger)): another multisig is recommended.
+    - Emergency caller address ([See glossary](../concepts/glossary.md#emergency-caller)): another multisig is recommended.
 
 If the process is successful, the system will output the address of the deployed Canon Guard and the action builder, save them.
 
