@@ -6,6 +6,8 @@ sidebar_position: 1
 
 ## Main Canon Guard flows
 
+> Before you start setting up everything, make sure you have gone through the [concepts](/category/concepts) section and understand what canon guard is about.
+
 ### Canon Guard deployment and set up
 
 In order to deploy Canon Guard, you need to have a [SAFE Wallet](https://app.safe.global/welcome) deployed in the corresponding chain. Then follow the next steps:
