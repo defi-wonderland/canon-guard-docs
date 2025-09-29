@@ -324,22 +324,29 @@ body:has(.homepage-container) {
   display: block !important;
 }
 
-/* Hide hamburger when mobile menu is open - comprehensive approach */
-body[data-navbar-sidebar="true"] .navbar__toggle,
-html[data-theme] body.navbar-sidebar--show .navbar__toggle,
-.navbar-sidebar--show .navbar__toggle,
-body.navbar-sidebar--show .navbar__toggle,
-html.navbar-sidebar--show .navbar__toggle,
-body:has(.navbar-sidebar) .navbar__toggle,
-body:has(.navbar-sidebar[style*="display"]) .navbar__toggle {
-  display: none !important;
+/* Mobile hamburger visibility */
+@media (max-width: 996px) {
+  /* Show by default on mobile */
+  .navbar__toggle { display: inline-flex !important; }
+
+  /* Hide only when the sidebar is actually open */
+  body.navbar-sidebar--show .navbar__toggle,
+  html.navbar-sidebar--show .navbar__toggle,
+  body[data-navbar-sidebar="true"] .navbar__toggle {
+    display: none !important;
+  }
+
+  /* Hide when the toggle itself is expanded (aria state) */
+  .navbar__toggle[aria-expanded="true"] { display: none !important; }
+
+  /* Avoid broad selectors that hide it when sidebar DOM exists but closed */
+
+  /* Ensure the close button sits on the right edge inside sidebar header */
+  .navbar-sidebar__brand { position: relative !important; }
+  .navbar-sidebar__close { position: absolute !important; right: 1rem !important; top: 0.6rem !important; }
 }
 
-/* Additional approach - hide when sidebar is visible */
-.navbar-sidebar:not([style*="display: none"]) ~ * .navbar__toggle,
-.navbar-sidebar[style*="transform: translateX(0)"]:not([style*="display: none"]) ~ * .navbar__toggle {
-  display: none !important;
-}
+/* Remove overly broad hide rules that concealed the toggle even when closed */
 
 /* Mobile sidebar menu - fixed */
 .navbar-sidebar {
@@ -369,32 +376,30 @@ body:has(.navbar-sidebar[style*="display"]) .navbar__toggle {
 .navbar-sidebar__brand {
   background: transparent !important;
   border-bottom: 1px solid rgba(251, 56, 0, 0.5);
-  padding: 1rem !important;
+  padding: 0.75rem 1rem !important;
   margin: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
 }
 
-.navbar-sidebar__brand .navbar__brand {
-  margin: 0 !important;
-  color: #DEDEDE !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 0.5rem !important;
-}
+.navbar-sidebar__brand .navbar__brand { margin: 0 !important; gap: 0.5rem !important; }
 
 .navbar-sidebar__brand .navbar__title {
-  color: #DEDEDE !important;
   font-family: 'Space Mono', monospace !important;
-  font-size: 1.1rem !important;
   font-weight: 700 !important;
+  /* hide original text node; use ::before for two-line brand */
+  color: transparent !important;
+  font-size: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1;
 }
 
-.navbar-sidebar__brand .navbar__logo {
-  height: 32px !important;
-  width: auto !important;
-}
+.navbar-sidebar__brand .navbar__logo { height: 28px !important; width: auto !important; }
 
 .navbar-sidebar__items {
   padding: 0.5rem 0;
@@ -455,6 +460,7 @@ body:has(.navbar-sidebar[style*="display"]) .navbar__toggle {
   justify-content: center !important;
   border-radius: 6px !important;
   transition: all 0.3s ease !important;
+  margin-left: auto !important;
 }
 
 .navbar-sidebar__close:hover {
