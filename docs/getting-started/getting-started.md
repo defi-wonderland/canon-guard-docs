@@ -6,7 +6,7 @@ sidebar_position: 1
 
 ## Main Canon Guard flows
 
-> Before you start setting up everything, make sure you have gone through the [concepts](/category/concepts) section and understand what canon guard is about.
+> Before you start setting up everything, make sure you have gone through the [concepts](/docs/category/concepts) section and understand what canon guard is about.
 
 ### Canon Guard deployment and set up
 
