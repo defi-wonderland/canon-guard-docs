@@ -26,6 +26,23 @@ Imagine it’s a regular Tuesday. Ops needs to move funds, the clock is ticking,
 
 Canon Guard changes the rhythm without changing the band. You still use your Safe. Owners still approve. But instead of pushing opaque blobs around, you point at an onchain **action**: a small contract whose only job is to say, clearly and immutably, **“here’s what we’ll execute”**. You queue that action. It sits onchain, locked in amber, easy to simulate, visible to all. Signers approve the exact Safe hash onchain. When the clock says go, anyone can execute.
 
+For example, sending 0.1 ETH to `vitalik.eth` is a one‑action builder and follows the same `queue → approve → execute` flow:
+
+```solidity
+ISimpleActions.SimpleAction[] memory txs = new ISimpleActions.SimpleAction[](1);
+txs[0] = ISimpleActions.SimpleAction(
+    {
+        target: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045, 
+        signature: "",  
+        data: hex"",
+        value: 0.1 ether
+    });
+address builder = simpleActionsFactory.createSimpleActions(txs);
+canonGuard.queueTransaction(builder); // Propose
+SAFE.approveHash(canonGuard.getSafeTransactionHash(builder)); // Approve onchain
+canonGuard.executeTransaction(builder); // Execute after delay
+```
+
 Routine moves don’t need to feel heavy. For things you do every week you pre‑approve trusted **action builders** (or whole **hubs** that mint specialized builders). Those skip the long wait and pass through a short delay. Ad‑hoc or novel moves still work, they just run on a longer fuse, so you have time to look twice.
 
 ![](../static/img/diagrams/high-level-diagram.png)
@@ -34,13 +51,13 @@ And if the worst day shows up there’s a big red switch called emergency mode. 
 
 ![](../static/img/diagrams/emergency.png)
 
-As a summary, what changes here is that:
+In summary, here’s what changes:
 
 - Approvals are onchain, where everyone can see them.
 - Payloads are immutable once queued, so what you simulate is what will run.
 - Time does a lot of the security work: short delays for pre‑approved, long delays for everything else.
 - When in doubt, you can always spend a Safe nonce with a no‑op to clear stale signatures.
 
-Canon Guard makes the default path safer without slowing the happy path. In the [Concepts section](./concepts/canon-in-a-nutshell.md), we’ll get technical: components, timelocks, hubs vs builders, emergency controls. If you are willing to try it out, go directly to [Getting Started](./getting-started/getting-started.md). 
+Canon Guard makes the default path safer without slowing the happy path. In the [Concepts section](./concepts/canon-in-a-nutshell.md), we’ll get technical: components, timelocks, hubs vs builders, emergency controls. If you want to try it out, go straight to [Getting Started](./getting-started/getting-started.md).
 
 **For now, remember: actions are addresses, approvals are onchain, time is your ally.**

@@ -1,87 +1,55 @@
 ---
 sidebar_position: 1
-title: In a Nutshell
+title: In a nutshell
 ---
 
-# Canon Guard
+# In a nutshell
 
-## Fundamental security assumptions
+## Assumptions
 
-- Using a UI hosted on an external server means relying entirely on it not being hacked.
-- Even extremely cautious multisig signers can still get hacked.
-- A "$5 wrench attack" (physical threats or coercion) is a genuine risk and should be considered when designing secure processes.
-- Even the most meticulous signers will eventually experience review fatigue from repeatedly checking the same multisig transactions, potentially overlooking critical details.
+Canon starts from certain assumptions: as we have seen before, external UIs and coordination layers are trust dependencies that can be compromised; even cautious multisig signers can lose keys or devices; coercion is a real risk and should be assumed possible; and reviewer fatigue accumulates over time, making repeated checks a poor line of defense. TL;DR: **the mindset should be that the worst-case scenario will probably happen.**
 
-## Core principles for Canon Guard
+## Core principles
 
-- **Minimize repetitive approvals**: Recurring transactions should only require thorough verification once, rather than repeatedly.
-- **Timelocks on all transactions**:
-    - Pre-approved or routine transactions can go through a short timelock
-    - New, unusual, or higher-risk transactions must face a longer timelock to allow cancellation.
-- **Prohibit `DELEGATECALL`**: This opcode introduces critical security risks and should be categorically disallowed.
-- **Eliminate external dependencies**: The Signers flow should rely solely on the blockchain—no off-chain trust or external services.
-- **Everything on-chain**:
-    - Approvals must be done via on-chain transactions only.
-    - Simulations and safety checks should depend purely on on-chain data, requiring zero off-chain inputs.
-- **Resilience under coercion**: Even in extreme scenarios (e.g., all signers compromised simultaneously), it should still be impossible to immediately drain the Safe.
-- **Emergency mode**:
-    - In case of an emergency, the Safe could be set in emergency mode by the allowed address (most probably a 1/x multisig)
-    - When in emergency mode, the emergency signer will be required to also sign any transaction for its execution (the emergency signer will most probably be a 4/7 multisig or similar).
-    - In case most signers of the Safe get compromised, this would allow the rotation of signers.
+To reduce avoidable risk without breaking existing workflows, Canon Guard enforces a few simple rules.
+- Routine operations get vetted once and reused, instead of demanding the same deep review every time. 
+- All transactions are subject to timelocks: short delays for pre‑approved or routine flows, longer delays for new, unusual, or higher‑risk proposals so there is time to react or cancel. 
+- Dangerous delegation is curtailed by blocking `DELEGATECALL` except for the multisend plumbing, and all coordination happens onchain, removing offchain blind spots. 
 
-## A Safer Execution Model for Multisigs
+The model is explicitly resilient to coercion because even with multiple compromised signers, instant drains do not happen. An emergency mode allows a designated trigger to narrow execution authority to a higher‑security caller, supporting safe owner rotation while under duress.
 
-Organizations that rely on multisigs often execute recurring transactions—such as salary disbursements or vesting fund claims. Each transaction proposal and signature introduces a surface for potential exploitation. The goal of this solution is to significantly reduce that risk.
+## A safer execution model for multisigs
 
-This approach draws inspiration from the *spells* architecture used by Sky (formerly MakerDAO) and Spark, additionally avoiding the use of `DELEGATECALL` that requires extreme carefulness on each call, because of the risk of changing the contract storage (catastrophic).
+Multisigs routinely perform recurring operations. Each fresh proposal and signature is an opening for mistakes or abuse. Canon Guard makes these flows repeatable, visible, and time‑bounded without sacrificing ad‑hoc flexibility. The design borrows from the “spells” pattern (Sky/MakerDAO, Spark) while explicitly avoiding unsafe storage mutation via `DELEGATECALL`.
 
-At the core of this system is the concept of Actions: Solidity smart contracts that encapsulate all the necessary transaction logic and parameters. These Actions are designed to be:
+At the core are **onchain Actions**: small contracts that fully specify the transaction batch to run. **Actions** are simple, immutable, and independent, and they live onchain for transparency and auditability. They should be reviewed or audited before inclusion in routine flows. Deploying an Action for a recurring task means you review it once; after it is vetted, you can safely reuse and queue it in the Safe without re‑doing the deep review each time.
 
-**Simple** – Focused and easy to reason about.
+### Components and roles
 
-**Immutable** – Once deployed, they cannot be altered.
+Canon Guard is the entrypoint that queues, prepares, and executes via the Safe. `OnlyCanonGuard.sol` is the Safe guard that restricts execution to Canon Guard and effectively blocks offchain signature routes.
 
-**Independent** – Self-contained, with no external dependencies.
+`EmergencyModeHook.sol` gates execution while emergency mode is set; `ActionsBuilder` contracts return concrete `Action[]` via `getActions()`; `ActionHub` contracts act as factories/registries that mint specialized builders (for example, `CappedTokenTransfersHub` → `CappedTokenTransfers`); and `MultiSendCallOnly` batches calls into a single Safe transaction via delegatecall.
 
-**On-chain** – Fully deployed to the blockchain for transparency and auditability.
+### Key functions and lifecycle
 
-To ensure security and reliability, all Actions should undergo thorough auditing prior to use.
+A typical lifecycle is straightforward. Optionally, the Safe opens a pre‑approval window by calling `approveActionsBuilderOrHub(address, duration)` on Canon Guard. A Safe owner then proposes by calling `queueTransaction(actionsBuilder)`, at which point Canon Guard snapshots the `Action[]` and sets `executableAt`/`expiresAt`. Owners approve the exact Safe transaction hash onchain using `SAFE.approveHash(...)`, obtained via `getSafeTransactionHash(actionsBuilder[, nonce])`. After the delay and before expiry, anyone can execute with `executeTransaction(actionsBuilder)` (or the batch variant). There is a no‑op escape hatch, `executeNoActionTransaction()`, to spend a nonce and invalidate stale signatures, and the proposer can cancel an enqueued item with `cancelEnqueuedTransaction(actionsBuilder)` as long as there are no approved hashes.
 
-> 
-> 💡
->
->Here’s an example of a simple Action, transferring 100,000 DAI to `vitalik.eth`:
->
-<!-- > ![example_transfer.png](example_transfer.png) -->
+### Data model
 
-Deploying an **Action**—a small, immutable smart contract—for recurring transactions ensures that it only needs to be carefully reviewed once. Once vetted, the same Action can be safely reused and queued in the Safe without requiring repeated in-depth scrutiny.
+Canon Guard maintains an internal set of enqueued builders and a `transactionsInfo[builder]` record with `proposer`, `actionsData` (ABI‑encoded `Action[]`), `executableAt`, `expiresAt`, and `isPreApproved`.
 
-To manage these Actions, we introduce an **Entrypoint** contract. This contract maintains a queue of Actions and tracks which Action addresses have been pre-approved, for a specific time period (e.g. “pre-approve an action for a year”).
+### Timings
 
-Organizations should aim to define all recurring or routine operations as on-chain Actions, clearly separating them from ad-hoc or sensitive transactions:
+Delays are explicit constants: `SHORT_TX_EXECUTION_DELAY` for pre‑approved items, `LONG_TX_EXECUTION_DELAY` for non‑pre‑approved, and `TX_EXPIRY_DELAY` defining the execution window after a transaction becomes eligible.
 
-- **Pre-vetted Actions**:
-    - Pass through a **short timelock** (e.g., 1 hour).
-    - Do **not** require detailed signer review each time they're queued.
-    - Examples include regular salary payments or token vesting claims.
-    - Pre-approved for a limited time period.
-- **Irregular Transactions**:
-    - Pass through a **long timelock** (e.g., 1 week).
-    - Should trigger alerts from monitoring tools when queued.
-    - Require full, manual reviews by signers to detect potential malicious behavior.
-    - **Adding a new Action to the pre-vetted list** is itself considered an irregular transaction.
-    - Best practice is to **minimize** the number and frequency of irregular transactions.
+### Signature model
 
-### Enhancing Safety with a Custom Safe Guard
+Approvals are the Safe’s onchain `approvedHashes(owner, safeTxHash) == 1`. For execution, Canon Guard composes approved‑hash signatures with `(r=owner, s=0, v=1)` and submits the multisend batch through the Safe.
 
-To enforce strict transaction boundaries, a custom Safe Guard contract should be deployed to:
+### Enforcing boundaries with the Safe guard
 
-- Block all **off-chain signatures**.
-- Allow only calls from the **Entrypoint**.
-- Reject all `DELEGATECALL` operations, **except** those to `multiSend`.
+Installing `OnlyCanonGuard` on the Safe makes the execution path explicit: approvals happen onchain; execution goes through Canon Guard; and arbitrary `DELEGATECALL` is rejected, with the exception of the controlled multisend.
 
-### Transparent and Simulatable
+### Transparent and simulatable
 
-Because both Actions and the queue are stored entirely **on-chain**, tools like Tenderly can be used to simulate transaction behavior without needing any off-chain inputs. This allows signers and observers to preview exactly how a transaction will execute.
-
-> A Canon Guard setup does **not** eliminate the need for caution. **Irregular transactions** remain a critical risk vector. Each must be handled with rigorous procedures and thorough reviews to ensure they are legitimate and free from hidden threats.
+Because both Actions and the queue live onchain, tools like Tenderly can simulate behavior without offchain inputs. Signers can preview exactly what will execute. A Canon Guard setup does not eliminate the need for caution: irregular transactions remain a critical risk vector and should be handled with rigorous procedures and thorough reviews.
