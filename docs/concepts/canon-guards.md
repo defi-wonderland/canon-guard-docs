@@ -20,7 +20,14 @@ Canon Guard stores the queued actions immutably at enqueue time; approvals are o
 - There is a wait: short for pre‑approved things, longer for new things.
 - After the wait, anyone can execute through Canon Guard. If emergency mode is on, only the emergency caller can execute.
 
-See the [Glossary](./glossary.md) for definitions of Safe, guard, action, action builder, action hub, pre‑approval, timelock, and emergency mode.
+## Deployment modes: attached vs detached
+
+You can adopt Canon Guard in two modes.
+
+- Detached (no Safe guard): you do not call `setGuard`. Teams use Canon Guard to queue/approve/execute, but the Safe does not enforce it. If Canon Guard has a bug, you can stop using it with no impact on the Safe. 
+- Attached (Safe guard set): you call `setGuard(CanonGuard)`. The Safe enforces “only Canon Guard may execute”. This closes bypasses and makes approvals uniformly onchain. Risk: a misconfiguration (wrong guard address, incompatible Safe version, or broken guard) can block execution until the guard is changed.
+
+A recommended rollout flow would be running in detached mode for a soak period to validate builders, hubs, and operational procedures. Once confident, attach the guard. Keep a pre‑built rollback ready to reset the guard if needed.
 
 ## In general terms, the flow is...
 
@@ -46,7 +53,7 @@ See the [Glossary](./glossary.md) for definitions of Safe, guard, action, action
 For a step‑by‑step guide, see [Getting Started](../getting-started/getting-started.md).
 :::
 
-### Lifecycle (happy path)
+### Lifecycle
 
 1) Propose: Safe owner calls `queueTransaction(actionsBuilder)` → Canon Guard snapshots `Action[]` and sets `executableAt`/`expiresAt`.
 2) Approve: owners approve `getSafeTransactionHash(actionsBuilder[, nonce])` via `SAFE.approveHash(hash)`.
@@ -62,9 +69,9 @@ At `checkTransaction(...)`, `OnlyCanonGuard` rejects unless `_msgSender == addre
 
 ### Emergency mode
 
-With emergency mode set, owners can still queue and approve, but only the configured emergency caller may execute. This adds an additional key for execution under duress.
+With emergency mode set, owners can still queue and approve, but only the configured emergency caller may execute. This adds an additional key for execution under duress. We will get into this later.
 
-### Reference (selected functions)
+### Reference
 
 - Pre‑approve: `approveActionsBuilderOrHub(address builderOrHub, uint256 duration)` (Safe only)
 - Propose: `queueTransaction(address actionsBuilder)` (Safe owner)
