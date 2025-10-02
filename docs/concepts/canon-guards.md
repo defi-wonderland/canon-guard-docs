@@ -27,13 +27,7 @@ You can adopt Canon Guard in two modes.
 - Detached (no Safe guard): you do not call `setGuard`. Teams use Canon Guard to queue/approve/execute, but the Safe does not enforce it. If Canon Guard has a bug, you can stop using it with no impact on the Safe. This is useful for an initial trial while you validate procedures.
 - Attached (Safe guard set): you call `setGuard(CanonGuard)`. The Safe enforces “only Canon Guard may execute”. This closes bypasses and makes approvals uniformly onchain. Risk: a misconfiguration (wrong guard address, incompatible Safe version, or broken guard) can block execution until the guard is changed.
 
-Recommended rollout: start detached for a few weeks, verify builders/hubs and team workflow, then attach. Keep a rollback prepared (e.g., an action from `ChangeSafeGuardActionFactory`) to reset the guard if needed.
-
-## In general terms, the flow is...
-
-1) Propose: put a transaction into the queue using an action builder.
-2) Approve: owners approve the exact transaction hash onchain.
-3) Execute: after the wait (and before expiry), execute through Canon Guard.
+A recommended rollout would be starting detached for a few weeks, verify builders/hubs and team workflow, then attach. Keep a rollback prepared (for example, an action from `ChangeSafeGuardActionFactory`) to reset the guard if needed.
 
 ## Breakdown
 
@@ -60,15 +54,5 @@ At `checkTransaction(...)`, `OnlyCanonGuard` rejects unless `_msgSender == addre
 ### Emergency mode
 
 With emergency mode set, owners can still queue and approve, but only the configured emergency caller may execute. This adds an additional key for execution under duress.
-
-### Reference (selected functions)
-
-- Pre‑approve: `approveActionsBuilderOrHub(address builderOrHub, uint256 duration)` (Safe only)
-- Propose: `queueTransaction(address actionsBuilder)` (Safe owner)
-- Hash: `getSafeTransactionHash(address actionsBuilder[, uint256 safeNonce])` (view)
-- Approvals: `getApprovedHashSigners(address actionsBuilder, uint256 safeNonce)` (view)
-- Execute: `executeTransaction(address actionsBuilder)` / `executeTransactions(address[] actionsBuilders)`
-- No‑op: `executeNoActionTransaction()`
-- Cancel: `cancelEnqueuedTransaction(address actionsBuilder)` (proposer; only if no approvals)
 
 That’s the whole flow. 

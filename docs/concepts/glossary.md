@@ -1,64 +1,63 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Glossary
 
-## Canon Guard is a system with several new definitions
 
-#### **Action**: 
-An on-chain call that one desires to execute through Canon Guard.
+#### Canon Guard
+The entrypoint contract that queues actions, computes the Safe transaction hash, checks approved owners, and executes via MultiSendCallOnly.
 
-#### **Action builder**: 
-A contract that will parse and build a set of actions and will be used to queue and execute them.
+#### Safe
+A multisig wallet that holds funds and executes transactions.
 
-#### **Factory**: 
-A previously deployed contract (don't worry, you won't have to deployed it yourself) that can be used to create new action builders or hubs.
+#### Guard (Safe guard)
+A hook contract the Safe calls before/after execution to allow or reject transactions. `OnlyCanonGuard` enforces execution only via Canon Guard.
 
-#### **Child**: 
-A contract created by a factory, it can be a hub or an action builder.
+#### Action
+An onchain call (target, data, value) to execute through Canon Guard.
 
-#### **Parent**: 
-The contract that created a specific contract. It can be a factory or a hub.
+#### Action builder
+A contract that returns a list of actions (`getActions()`) to queue and execute.
 
-#### **Hub**: 
-A more sophisticated contract that can be used to give new functionalities to action builders. Like managing caps, saving storage, doing complex checks that can't be made on the action builder itself. An action builder that has a parent hub will report to this contract and will be it's hub child.
+#### Factory
+A contract that deploys known contract types (Canon Guard, hubs, builders) and tracks children (provenance).
 
-#### **Hub child**: 
-The child of a hub, it is always an action builder.
+#### Parent / Child
+Parent is the creator contract (`PARENT`), which can be a factory or hub. Child is the created contract (hub or builder).
 
-#### **Emergency mode**: 
-When Canon Guard enters this mode, the next methods can only be called by the emergency caller: `executeTransaction`, `executeTransactions`, `executeNoActionTransaction` and `cancelEnqueuedTransaction`.
+#### Hub (Action hub)
+A policy parent that creates builders and tracks them. Hubs expose `isHubChild(child)` to prove provenance.
 
-#### **Emergency caller**:
-Privileged address that is configured at deployment time, is the only one able to execute some methods when emergency mode is on.
+#### Approved hash (Safe)
+The Safe’s onchain approval record: `approvedHashes(owner, safeTxHash) == 1` when an owner approved the hash.
 
-#### **Emergency trigger**:
-Privileged address that is configured at deployment time, is the only one able to set the emergency mode on.
+#### MultiSendCallOnly
+Safe library used by Canon Guard to batch and execute actions in a single Safe transaction.
 
-#### **Short execution delay**:
-Timelock for pre-approved actions (actions that were approved by calling `approveActionsBuilderOrHub`).
+#### Short execution delay
+Timelock for pre‑approved actions (pre‑approved via `approveActionsBuilderOrHub`).
 
-#### **Long execution delay**:
-Timelock for actions that were not pre-approved
+#### Long execution delay
+Timelock for actions that were not pre‑approved.
 
-#### **Transaction expiry delay**:
-Seconds until the queued actions expire (meaning that it can no longer be executable).
+#### Transaction expiry delay
+Time window after `executableAt` during which a queued action can be executed.
 
-#### **Maximum approval duration**: 
-The maximum amount of time an action builder or hub can be approved.
+#### Maximum approval duration
+Maximum time a builder or hub can be pre‑approved.
 
-#### **Approve an action builder or hub**: 
-The process of pre-approving a set of actions (or action builder or hub). Those actions will have a short execution delay period. If approving a hub, all hub children will inherit the approved status. 
+#### Approve an action builder or hub
+Pre‑approve a builder or hub so its queued actions use the short delay. If approving a hub, all hub children inherit the approved status.
 
-#### **Queue a transaction**:
-The process of adding a new set of actions to the queue, making them available to sign, and initiating the timelock.
+#### Queue a transaction
+Add actions to the queue, making them available to approve, and start the timelock.
 
-#### **Execute a transaction**: 
-If the actions have the required signatures and they not expired, they can be executed by anyone. This will call the SAFE with the saved payload and finish the main flow of Canon Guard.
+#### Execute a transaction
+If the actions have required onchain approvals and have not expired, anyone can execute (emergency mode restricts to the emergency caller).
 
-#### **Cancel enqueued transaction**:
-If a transaction does not have any signers it can be effectively removed from the queue.
+#### Cancel enqueued transaction
+Remove a queued item if there are no approved hashes. In emergency mode, only the emergency caller may cancel.
 
-#### **Execute no-action transaction**:
-In the case were a transaction includes an error but it was already signed by the required signers, a rapid, no-timelock transaction can be sent that will use the current nonce of the SAFE in order to nullify the signatures for that transaction. 
+#### Execute no‑action transaction (no‑op)
+Execute an empty batch to spend the Safe’s nonce and invalidate existing approvals. Used to clear signatures without side effects. 
