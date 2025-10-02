@@ -15,7 +15,7 @@ You should consider using a hub when you find yourself repeating the same action
 
 ## What you get
 
-By using a hub, you define one policy that governs many compliant builders, ensuring consistency and simplifying management. The hub maintains a built-in registry, so it can always prove which builders are its legitimate children. This setup also streamlines pre-approval: you only need to approve the hub once, and all its children automatically inherit the short delay.
+By using a hub, you define one policy that governs many compliant builders, ensuring consistency and simplifying management. The hub maintains a built-in registry, so it can always prove which builders are its legitimate children. This setup also streamlines pre-approval: You only need to approve the hub once, and all its children automatically inherit the short delay.
 
 ## How it works
 
@@ -23,7 +23,7 @@ By using a hub, you define one policy that governs many compliant builders, ensu
 - Each child remembers who created it (its parent hub)
 - When you queue a child in Canon Guard, Canon Guard checks the parent; if it’s an approved hub, the short delay applies
 
-## Example: capped token transfers
+## Example: Capped token transfers
 
 You want to cap token outflows per month and keep routine transfers fast.
 

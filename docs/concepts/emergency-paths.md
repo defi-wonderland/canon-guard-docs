@@ -11,8 +11,8 @@ This lets you keep operations visible and progressing (proposals/approvals conti
 
 ## Why it exists
 
-- Coercion or compromise: if multiple owners are pressured or keys are suspected to be leaked, execution is temporarily centralized to a safer group.
-- Time to react: queued payloads remain immutable and simulatable, execution is paused except for the emergency caller.
+- Coercion or compromise: If multiple owners are pressured or keys are suspected to be leaked, execution is temporarily centralized to a safer group.
+- Time to react: Queued payloads remain immutable and simulatable, execution is paused except for the emergency caller.
 - Continuity: governance and operations (proposals/approvals) don’t freeze, the backlog is preserved until it is safe to execute.
 
 ## Who does what (normal vs emergency)
@@ -20,17 +20,17 @@ This lets you keep operations visible and progressing (proposals/approvals conti
 - Queue (propose): Safe owners. Same in normal and emergency.
 - Approve onchain: Safe owners. Same in normal and emergency.
 - Execute:
-  - Normal: anyone
-  - Emergency: only emergency caller
+  - Normal: Anyone
+  - Emergency: Only emergency caller
 - Execute “no‑action”:
-  - Normal: anyone
-  - Emergency: only emergency caller
+  - Normal: Anyone
+  - Emergency: Only emergency caller
 - Cancel enqueued tx:
-  - Normal: original proposer only
-  - Emergency: only emergency caller
+  - Normal: Original proposer only
+  - Emergency: Only emergency caller
 - Toggle emergency mode:
-  - Set ON: emergency trigger
-  - Set OFF: the Safe (owners via the Safe)
+  - Set ON: Emergency trigger
+  - Set OFF: The Safe (owners via the Safe)
 - Update roles (emergency trigger/caller): the Safe
 
 For reference, see [`EmergencyModeHook.sol`](https://github.com/defi-wonderland/canon-guard/blob/dev/src/contracts/EmergencyModeHook.sol).

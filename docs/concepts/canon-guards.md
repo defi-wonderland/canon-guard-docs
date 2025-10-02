@@ -17,15 +17,15 @@ Canon Guard stores the queued actions immutably at enqueue time; approvals are o
 
 - You put transactions in a queue, and they stay exactly as written.
 - Owners approve the transaction onchain (no offchain signatures).
-- There is a wait: short for pre‑approved things, longer for new things.
+- There is a wait: Short for pre‑approved things, longer for new things.
 - After the wait, anyone can execute through Canon Guard. If emergency mode is on, only the emergency caller can execute.
 
-## Deployment modes: attached vs detached
+## Deployment modes: Attached vs detached
 
 You can adopt Canon Guard in two modes.
 
-- Detached (no Safe guard): you do not call `setGuard`. Teams use Canon Guard to queue/approve/execute, but the Safe does not enforce it. If Canon Guard has a bug, you can stop using it with no impact on the Safe. This is useful for an initial trial while you validate procedures.
-- Attached (Safe guard set): you call `setGuard(CanonGuard)`. The Safe enforces “only Canon Guard may execute”. This closes bypasses and makes approvals uniformly onchain. Risk: a misconfiguration (wrong guard address, incompatible Safe version, or broken guard) can block execution until the guard is changed.
+- Detached (no Safe guard): You do not call `setGuard`. Teams use Canon Guard to queue/approve/execute, but the Safe does not enforce it. If Canon Guard has a bug, you can stop using it with no impact on the Safe. This is useful for an initial trial while you validate procedures.
+- Attached (Safe guard set): You call `setGuard(CanonGuard)`. The Safe enforces “only Canon Guard may execute”. This closes bypasses and makes approvals uniformly onchain. Risk: a misconfiguration (wrong guard address, incompatible Safe version, or broken guard) can block execution until the guard is changed.
 
 A recommended rollout would be starting detached for a few weeks, verify builders/hubs and team workflow, then attach. Keep a rollback prepared (for example, an action from `ChangeSafeGuardActionFactory`) to reset the guard if needed.
 
@@ -33,9 +33,9 @@ A recommended rollout would be starting detached for a few weeks, verify builder
 
 ### Roles and responsibilities
 
-- `CanonGuard.sol` (entrypoint): queue, compute Safe tx hash, collect approved owners, execute via `MultiSendCallOnly`.
-- `OnlyCanonGuard.sol` (Safe guard, inherited): enforces “execution only via Canon Guard” by rejecting checks where `_msgSender != address(this)` (the Canon Guard contract).
-- `Approver.sol` (helper): standardizes `SAFE.approveHash(hash)` if approvals are driven via contracts/scripts.
+- `CanonGuard.sol` (entrypoint): Queue, compute Safe tx hash, collect approved owners, execute via `MultiSendCallOnly`.
+- `OnlyCanonGuard.sol` (Safe guard, inherited): Enforces “execution only via Canon Guard” by rejecting checks where `_msgSender != address(this)` (the Canon Guard contract).
+- `Approver.sol` (helper): Standardizes `SAFE.approveHash(hash)` if approvals are driven via contracts/scripts.
 
 As an example, a lifecycle will look like this: 
 

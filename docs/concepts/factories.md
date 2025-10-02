@@ -15,9 +15,9 @@ In practice, this gives you a clean way to produce approved patterns (for exampl
 
 But, why factories?
 
-- Provenance: every child records its factory as `PARENT` (via constructor arg), and factories keep a registry of their children. Canon Guard can use this to accept a builder because it belongs to an allow‑listed hub/factory.
-- Repeatability: avoid re‑entering long constructor parameter lists, so it reduces human error.
-- Policy: pre‑approve a whole hub (or all its children) for the short path. Keep everything else on the long path.
+- Provenance: Every child records its factory as `PARENT` (via constructor arg), and factories keep a registry of their children. Canon Guard can use this to accept a builder because it belongs to an allow‑listed hub/factory.
+- Repeatability: Avoid re‑entering long constructor parameter lists, so it reduces human error.
+- Policy: Pre‑approve a whole hub (or all its children) for the short path. Keep everything else on the long path.
 
 ## Flow
 
