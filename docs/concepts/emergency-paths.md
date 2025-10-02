@@ -3,7 +3,7 @@ sidebar_position: 7
 title: Emergency paths
 ---
 
-## What is “emergency mode”?
+## What is Emergency mode?
 
 Emergency mode is a controlled switch that narrows who can execute queued transactions. Owners can still propose (queue) and approve onchain as usual, but while emergency mode is ON, only a designated emergency caller can execute (or perform the no‑op/cancel) through Canon Guard.
 

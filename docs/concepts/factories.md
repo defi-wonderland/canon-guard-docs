@@ -3,7 +3,7 @@ sidebar_position: 4
 title: Factories
 ---
 
-## Overview
+## What is a factory? 
 
 Factories deploy known contract types in a repeatable way and stamp provenance so Canon Guard can reason about who created what. A factory:
 

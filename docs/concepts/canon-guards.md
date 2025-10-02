@@ -3,7 +3,7 @@ sidebar_position: 3
 title: Canon Guards
 ---
 
-## Overview
+## What is a Canon Guard, exactly?
 
 `CanonGuard` is the Safe’s transaction entrypoint. It enqueues transactions produced by action builders, persists the payload (ABI‑encoded actions), computes the exact Safe transaction hash to approve, verifies which owners have onchain‑approved that hash via `approvedHashes`, and executes through `MultiSendCallOnly` once within the allowed window. The Safe’s guard is set to the `CanonGuard` contract (via the `OnlyCanonGuard` base), so the Safe rejects any execution not initiated by `CanonGuard`.
 
@@ -37,11 +37,20 @@ A recommended rollout would be starting detached for a few weeks, verify builder
 - `OnlyCanonGuard.sol` (Safe guard, inherited): enforces “execution only via Canon Guard” by rejecting checks where `_msgSender != address(this)` (the Canon Guard contract).
 - `Approver.sol` (helper): standardizes `SAFE.approveHash(hash)` if approvals are driven via contracts/scripts.
 
-The lifecycle will look like this: 
+As an example, a lifecycle will look like this: 
 
-1) Propose: Safe owner calls `queueTransaction(actionsBuilder)` → Canon Guard snapshots `Action[]` and sets `executableAt`/`expiresAt`.
-2) Approve: owners approve `getSafeTransactionHash(actionsBuilder[, nonce])` via `SAFE.approveHash(hash)`.
-3) Execute: after `executableAt` and before `expiresAt`, call `executeTransaction(actionsBuilder)` (or `executeTransactions([...])`). Canon Guard builds approved‑hash signatures and executes the multisend batch.
+![Canon Guard end‑to‑end flow](/img/diagrams/full-diagram.png)
+
+Consider that in this example, we are interacting with the CapTokenTransferHub:
+
+- **(1) Set guard (attached mode)**: Safe is configured with `OnlyCanonGuard`, so the Safe only allows executions initiated by the Canon Guard contract.
+- **(2) Optional pre‑approval**: `approveActionsBuilderOrHub(hub, duration)` lets owners pre‑approve a builder or hub for a limited window, unlocking the short delay path.
+- **(3–4) Create builder**: A specific builder is instantiated (e.g. `createNewActionBuilder(token, amount)`), and the hub exposes its `Action[]` via `getActions()`.
+- **(5–7) Queue**: `queueTransaction(builder)` snapshots the ABI‑encoded actions and sets `executableAt`/`expiresAt`. The snapshot is immutable; later builder changes don’t affect the queued payload.
+- **Delay window**: Execution is blocked until `executableAt`. Short if pre‑approved, long otherwise; timing is transparent onchain.
+- **(8) Approvals**: Owners approve `getSafeTransactionHash(actions[, nonce])` onchain using `SAFE.approveHash(...)`. Approvals accumulate in `approvedHashes`.
+- **(9) Execute**: After `executableAt` and before `expiresAt`, call `executeTransaction(builder)` (or batch). Canon Guard assembles approvals and executes via `MultiSendCallOnly`.
+- **(10) Effects**: The Safe performs the encoded actions atomically (e.g., capped transfers from a hub action).
 
 If circumstances change:
 - No‑op: `executeNoActionTransaction()` spends a Safe nonce to invalidate stale signatures.
@@ -49,7 +58,7 @@ If circumstances change:
 
 ### What the Safe guard checks
 
-At `checkTransaction(...)`, `OnlyCanonGuard` rejects unless `_msgSender == address(this)` (i.e., the caller seen by Safe is the Canon Guard contract). This closes ad‑hoc or offchain‑driven execution paths.
+At `checkTransaction(...)`, `OnlyCanonGuard` rejects unless `_msgSender == address(this)` (i.e. the caller seen by Safe is the Canon Guard contract). This closes ad‑hoc or offchain‑driven execution paths.
 
 ### Emergency mode
 

@@ -3,7 +3,7 @@ sidebar_position: 8
 title: No actions (spend nonce)
 ---
 
-## What is a “no‑action” transaction?
+## What is a no‑action transaction?
 
 A no‑action is a special transaction that deliberately does nothing but spends the Safe’s next nonce. It’s used to invalidate signatures that are already collected for a queued item when you decide you no longer want to execute that item.
 

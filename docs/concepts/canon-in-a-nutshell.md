@@ -3,7 +3,7 @@ sidebar_position: 1
 title: In a nutshell
 ---
 
-# In a nutshell
+# The system explained in a nutshell
 
 ## Assumptions
 
