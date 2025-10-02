@@ -30,7 +30,7 @@
   /* Typography */
   --ifm-font-family-base: 'Space Mono', 'Courier New', Courier, monospace;
   --ifm-font-family-monospace: 'Space Mono', 'Courier New', Courier, monospace;
-  --ifm-code-font-size: 95%;
+  --ifm-code-font-size: 105%;
   
   /* Borders and dividers */
   --ifm-color-emphasis-300: #FB3800;
@@ -738,7 +738,7 @@ h2::after {
   right: -1px;
   top: 0;
   bottom: 0;
-  width: 2px;
+  width: 0.3px;
   background: linear-gradient(180deg, 
     rgba(251, 56, 0, 0.8) 0%, 
     rgba(251, 56, 0, 1) 50%, 
@@ -922,7 +922,7 @@ pre[class*="language-"] {
   padding: 1.5rem !important;
   margin: 1.5rem 0 !important;
   font-family: 'Space Mono', monospace !important;
-  font-size: 0.85rem !important;
+  font-size: 1rem !important;
   line-height: 1.6 !important;
   overflow-x: auto;
   color: #DEDEDE !important;
@@ -1217,7 +1217,7 @@ td {
   pre[class*="language-"] {
     padding: 1rem !important;
     margin: 1rem 0 !important;
-    font-size: 0.8rem !important;
+    font-size: 0.95rem !important;
   }
 
   code { font-size: 0.8em !important; }
