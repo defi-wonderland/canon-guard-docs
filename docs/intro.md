@@ -4,60 +4,74 @@ slug: /
 title: Canon Guard
 ---
 
-## Context
+Safe proposals and signatures are gathered offchain. Once enough offchain signatures are collected to reach the threshold, anyone can submit the transaction and signatures onchain for execution. This flow is efficient, but it creates a visibility gap: payloads can change or be misrepresented offchain, individual signers might see slightly different views, and stale signatures can linger. The result is great UX with some operational blind spots when stakes are high.
 
-For most organizations, Safe is the right choice and works beautifully. Then comes the week you move eight figures and suddenly good UX isn’t the same as good risk. The assumptions that work for small DAOs (lightweight coordination, off‑chain convenience, human vigilance) start to creak under institutional weight.
+```mermaid
+sequenceDiagram
+  autonumber
+  %% Offchain proposal and signatures
+  participant P as Proposer (offchain)
+  participant S1 as Signer 1 (offchain)
+  participant S2 as Signer 2 (offchain)
+  %% Onchain execution
+  participant Safe as Safe (onchain)
 
-<!-- ::: note Reference
-If this is the first time you hear about Safe, check [Gnosis Safe]() and [Safe Guards]().
-::: -->
-
-When signatures and status live off‑chain, there’s a fog. A compromised frontend or coordination layer can make reality diverge from what signers see. You don’t notice until the threshold is met and the transaction sails through. [We’ve seen how that story can end.](https://rekt.news/not-so-safe)
-
-At scale, the five dollar wrench stops being a meme and becomes an operating assumption. If multiple signers are pressured at the same time, the “independent, freely acting signer” model breaks. Maybe temporarily, but long enough to matter. 
-
-And even without drama, cognitive fatigue is a thing. After the fiftieth recurring transfer, even meticulous reviewers skim. That’s fine when the stakes are low, it’s risky when they aren’t.
-
-Canon Guard is the answer we wanted: keep the Safe, keep the habits, remove the blind spots. 
-
-## Canon Guard
-
-Imagine it’s a regular Tuesday. Ops needs to move funds, the clock is ticking, and everyone’s juggling ten other things. In the usual Safe flow, you craft a transaction, collect signatures somewhere off-chain, and hope the frontend shows everyone the same truth. It’s fine until the day it isn’t.
-
-Canon Guard changes the rhythm without changing the band. You still use your Safe. Owners still approve. But instead of pushing opaque blobs around, you point at an onchain **action**: a small contract whose only job is to say, clearly and immutably, **“here’s what we’ll execute”**. You queue that action. It sits onchain, locked in amber, easy to simulate, visible to all. Signers approve the exact Safe hash onchain. When the clock says go, anyone can execute.
-
-For example, sending 0.1 ETH to `vitalik.eth` is a one‑action builder and follows the same `queue → approve → execute` flow:
-
-```solidity
-ISimpleActions.SimpleAction[] memory txs = new ISimpleActions.SimpleAction[](1);
-txs[0] = ISimpleActions.SimpleAction(
-    {
-        target: 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045, 
-        signature: "",  
-        data: hex"",
-        value: 0.1 ether
-    });
-address builder = simpleActionsFactory.createSimpleActions(txs);
-canonGuard.queueTransaction(builder); // Propose
-SAFE.approveHash(canonGuard.getSafeTransactionHash(builder)); // Approve onchain
-canonGuard.executeTransaction(builder); // Execute after delay
+  Note over P,S2: Proposal and signatures happen offchain
+  P->>S1: Draft + share transaction
+  S1-->>P: Sign offchain
+  P->>S2: Share transaction
+  S2-->>P: Sign offchain
+  P->>Safe: execute(tx, signatures)
+  Safe->>Safe: Verify threshold
+  Safe-->>P: Execute onchain
 ```
 
-Routine moves don’t need to feel heavy. For things you do every week you pre‑approve trusted **action builders** (or whole **hubs** that mint specialized builders). Those skip the long wait and pass through a short delay. Ad‑hoc or novel moves still work, they just run on a longer fuse, so you have time to look twice.
+## What Canon Guard changes
 
-![](../static/img/diagrams/high-level-diagram.png)
+Canon Guard keeps your Safe but moves intent onchain. Instead of passing offchain blobs around, you reference an onchain action that encodes exactly what will be executed. Owners approve the Safe hash onchain against this payload. Time‑based delays then separate routine activity from novel changes.
 
-And if the worst day shows up there’s a big red switch called emergency mode. Flip it, and execution authority narrows to a higher‑security caller. Owners can still propose and approve, but nothing moves unless the emergency caller decides it should. The system stalls in the safest possible way.
+### Actions
 
-![](../static/img/diagrams/emergency.png)
+An action is a minimal onchain contract that encodes the exact Safe call data and value to be executed. Because it is an address with immutable contents, anyone can simulate it and verify that approvals match the precise payload that will run. Actions are queued onchain and later executed through the Safe.
 
-In summary, here’s what changes:
+<!-- ### Action builders and hubs
 
-- Approvals are onchain, where everyone can see them.
-- Payloads are immutable once queued, so what you simulate is what will run.
-- Time does a lot of the security work: short delays for pre‑approved, long delays for everything else.
-- When in doubt, you can always spend a Safe nonce with a no‑op to clear stale signatures.
+An action builder is a contract that deploys actions with a predefined structure (for example, a single ERC‑20 transfer or a known sequence of calls). Teams can pre‑approve specific builders, or whole hubs that mint families of specialized builders. Pre‑approvals make routine tasks fast while keeping their shape constrained and reviewable. -->
 
-Canon Guard makes the default path safer without slowing the happy path. In the [Concepts section](./concepts/canon-in-a-nutshell.md), we’ll get technical: components, timelocks, hubs vs builders, emergency controls. If you want to try it out, go straight to [Getting Started](./getting-started/getting-started.md).
+### Short vs long paths
 
-**For now, remember: actions are addresses, approvals are onchain, time is your ally.**
+Proposals originating from pre‑approved actions follow a short delay before they become executable. Everything else follows a longer delay. This split reduces signer fatigue: recurring, low‑variance operations clear quickly; novel or higher‑risk operations deliberately take longer, giving reviewers time and space to look carefully.
+
+### Emergency mode
+
+When emergency mode is enabled, owners can still propose and approve actions, but execution is restricted to a designated emergency caller. This narrows authority at the final step so outflows pause safely while investigation or coordination happens. Normal execution resumes when emergency mode is turned off.
+
+### Why onchain approvals
+
+- Shared source of truth: everyone reviews the same immutable payload.
+- Easy simulation: actions are addresses you can fork‑simulate and diff.
+- Clear audit trail: proposals, approvals, and execution are recorded onchain.
+- Safer operations: time delays and explicit pre‑approvals make intent legible and harder to spoof.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant H as Builder/Hub
+  participant P as Proposer (owner)
+  participant CG as Canon Guard (onchain)
+  participant Safe as Safe (onchain)
+
+  H-->>P: Provide action address
+  P->>CG: Queue action onchain
+  CG->>CG: Check builder pre-approval
+  alt Pre-approved
+    CG-->>P: Short delay
+  else Not pre-approved
+    CG-->>P: Long delay
+  end
+  P->>Safe: Owners approve hash onchain (threshold)
+  CG->>Safe: Execute after delay
+  Safe-->>P: Transaction executed
+```
+
+In the [Concepts](./concepts/canon-in-a-nutshell.md) section, you’ll find details on components, timelocks, hubs vs builders, and emergency controls. For practical steps, see [Getting Started](./getting-started/getting-started.md).
