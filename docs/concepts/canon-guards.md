@@ -39,7 +39,7 @@ A recommended rollout would be starting detached for a few weeks, verify builder
 
 As an example, a lifecycle will look like this: 
 
-![Canon Guard end‑to‑end flow](/img/diagrams/full-diagram.png)
+![Canon Guard end‑to‑end flow](/img/diagrams/first-diagram.png)
 
 Consider that in this example, we are interacting with the CapTokenTransferHub:
 
