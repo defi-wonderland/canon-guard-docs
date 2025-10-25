@@ -73,7 +73,7 @@ const StyledWrapper = styled.div`
     --border-radius: 24px;
     --dot-size: 10px;
     --btn-color: #0C0C0C;
-    --hue: 16deg; /* FB3800 orange hue */
+    --hue: 136deg; /* Canon green hue */
     --animation-duration: 1.2s;
 
     position: relative;
@@ -90,9 +90,9 @@ const StyledWrapper = styled.div`
 
     box-shadow:
       1px 1px 2px 0 #ffffff15,
-      2px 2px 2px #FB380020 inset,
-      2px 2px 4px #FB380015 inset,
-      2px 2px 8px #FB380010 inset;
+      2px 2px 2px #15A43E20 inset,
+      2px 2px 4px #15A43E15 inset,
+      2px 2px 8px #15A43E10 inset;
 
     transition: box-shadow 50ms linear;
 
@@ -207,7 +207,7 @@ const StyledWrapper = styled.div`
       0 0 10px 2px hsla(var(--hue), 80%, 50%, 0.4),
       0 0 20px 10px hsla(var(--hue), 80%, 50%, 0.6),
       0 0 50px 20px hsla(var(--hue), 80%, 50%, 0.4),
-      0 0 16px 1px #FB3800 inset;
+      0 0 16px 1px #15A43E inset;
 
     opacity: 0;
   }
@@ -230,7 +230,7 @@ const StyledWrapper = styled.div`
       background-color: hsla(var(--hue), 50%, 50%, 0.2);
     }
     50% {
-      background-color: #FB3800;
+      background-color: #15A43E;
     }
   }
 
@@ -252,15 +252,15 @@ const StyledWrapper = styled.div`
     transform: translate3d(0, -2px, 2px);
 
     .btn-txt {
-      color: #FB3800;
-      background-image: linear-gradient(#FB3800, #FB3800);
-      text-shadow: 0 0 20px #FB380080;
+      color: #15A43E;
+      background-image: linear-gradient(#15A43E, #15A43E);
+      text-shadow: 0 0 20px #15A43E80;
     }
 
     .pulse {
       &.dot {
         animation: none;
-        background-color: #FB3800;
+        background-color: #15A43E;
       }
       &::after {
         animation: none;
@@ -270,34 +270,34 @@ const StyledWrapper = styled.div`
   }
 
   .btn:focus-visible {
-    outline: 2px dashed #FB3800;
+    outline: 2px dashed #15A43E;
     outline-offset: var(--padding);
   }
 
   .btn:active {
     filter: drop-shadow(
-      var(--padding) 0 var(--padding) #FB3800
+      var(--padding) 0 var(--padding) #15A43E
     );
     transform: translate3d(0, 0, -4px);
 
     .btn-txt {
-      color: #FB3800;
-      background-image: linear-gradient(#FB3800, #FB3800);
+      color: #15A43E;
+      background-image: linear-gradient(#15A43E, #15A43E);
     }
 
     ~ .dot {
       animation-play-state: paused;
-      background-color: #FB3800;
+      background-color: #15A43E;
     }
   }
 
   .btn-wrapper:has(.btn:active) {
     box-shadow:
       1px 1px 2px 0 #ffffff20,
-      2px 2px 2px #FB380020 inset,
-      2px 2px 4px #FB380015 inset,
-      2px 2px 8px #FB380010 inset,
-      0 0 32px 2px #FB380050 inset;
+      2px 2px 2px #15A43E20 inset,
+      2px 2px 4px #15A43E15 inset,
+      2px 2px 8px #15A43E10 inset,
+      0 0 32px 2px #15A43E50 inset;
   }
 `;
 
