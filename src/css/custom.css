@@ -33,7 +33,7 @@
   --ifm-font-family-base: var(--font-sans);
   --ifm-font-family-monospace: 'Space Mono', 'Courier New', Courier, monospace;
   --ifm-code-font-size: 95%;
-
+  
   /* Borders and dividers */
   --ifm-color-emphasis-300: rgba(21, 164, 62, 0.3);
   --ifm-color-emphasis-600: rgba(21, 164, 62, 0.6);
@@ -789,7 +789,7 @@ pre[class*="language-"] {
   padding: 1.5rem !important;
   margin: 1.5rem 0 !important;
   font-family: 'Space Mono', monospace !important;
-  font-size: 0.85rem !important;
+  font-size: 1rem !important;
   line-height: 1.6 !important;
   overflow-x: auto;
   color: #DEDEDE !important;
@@ -1043,7 +1043,7 @@ td {
   pre[class*="language-"] {
     padding: 1rem !important;
     margin: 1rem 0 !important;
-    font-size: 0.8rem !important;
+    font-size: 0.95rem !important;
   }
 
   code { font-size: 0.8em !important; }
