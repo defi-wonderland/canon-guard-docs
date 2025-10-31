@@ -95,19 +95,8 @@ const config: Config = {
       respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'Canon Guard',
-      logo: {
-        alt: 'Canon Guard Logo',
-        src: 'img/hero/canon-guard-logo.svg',
-      },
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Docs',
-        },
-      ],
+      title: '',
+      items: [],
     },
     footer: {
       style: 'dark',

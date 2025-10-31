@@ -10,15 +10,14 @@ export default function HeroSection(): JSX.Element {
   return (
     <section className={styles.heroSection}>
       <AnimatedStars />
-      
-      <img 
-        src="/img/hero/canon-guard-hero.svg" 
-        alt="Canon Guard" 
-        className={styles.heroLogo}
-      />
-      
+
+      <div className={styles.wordmark} aria-label="Canon Guard">
+        <span className={styles.canon}>CANON</span>
+        <span className={styles.guard}>GUARD</span>
+      </div>
+
       <p className={styles.tagline}>Your final line of defense</p>
-      
+
       <AnimatedButton to="/docs">
         Get Started
       </AnimatedButton>
