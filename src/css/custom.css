@@ -784,7 +784,7 @@ h2::after {
 .prism-code,
 pre[class*="language-"] {
   background: rgba(8, 8, 8, 0.95) !important;
-  border: 1px solid rgba(251, 56, 0, 0.4);
+  border: 1px solid var(--brand-shade-2-30);
   border-radius: 6px;
   padding: 1.5rem !important;
   margin: 1.5rem 0 !important;
