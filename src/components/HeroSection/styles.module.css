@@ -1,0 +1,82 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 80px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  text-align: center;
+}
+
+
+.wordmark {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  animation: fadeInUp 1.2s ease-out;
+  line-height: 0.9;
+}
+
+.canon {
+  color: var(--forground-accent-0);
+  font-family: var(--font-sans);
+  font-weight: 700; /* bold */
+  font-style: italic;
+  font-size: clamp(64px, 12vw, 120px);
+}
+
+.guard {
+  color: var(--forground-accent-0);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(64px, 12vw, 120px);
+}
+
+.tagline {
+  position: relative;
+  z-index: 10;
+  margin: 1rem 0 3rem 0;
+  animation: fadeInUp 1.5s ease-out 0.3s both;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #ffffff;
+  text-transform: lowercase;
+  letter-spacing: 0.1em;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .canon, .guard { font-size: clamp(40px, 14vw, 72px); }
+  .tagline { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .canon, .guard { font-size: clamp(38px, 18vw, 64px); }
+  .tagline { font-size: 0.9rem; }
+  
+  .tagline {
+    font-size: 1rem;
+  }
+}
