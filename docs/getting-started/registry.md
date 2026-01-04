@@ -16,7 +16,7 @@ These factories are deployed via CREATE2 and share the same addresses across all
 
 | Contract | Address |
 | -------- | ------- |
-| CanonGuardFactory | `0x2feAfb3A144e18f9C243626BC69B46Fc19a4C88b` |
+| CanonGuardFactory | `0x656c264F914bd8Fe7bbAfb9B4F2EBcB4f259F67C` |
 | AllowanceClaimorFactory | `0x6636eDd0125880677f3a1f7411555ea64411d60E` |
 | PreApproveActionFactory | `0x2A62b0644BA7F4648179BfAE9a279D63DC44eF4a` |
 | CappedTokenTransfersHubFactory | `0x8531f72986374445507c29A0753fcc9cA36468D0` |
