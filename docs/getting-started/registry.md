@@ -8,9 +8,9 @@ All Canon Guard contracts are verified on their respective block explorers.
 
 ---
 
-## Cross-Chain Factories
+## Cross-Chain Factories & Action Builders
 
-These factories are deployed via CREATE2 and share the same addresses across all supported chains.
+These are deployed via CREATE2 and share the same addresses across all supported chains.
 
 **Supported chains:** Ethereum, Optimism.
 
@@ -25,6 +25,9 @@ These factories are deployed via CREATE2 and share the same addresses across all
 | SetEmergencyTriggerActionFactory | `0x701f4342800ddF69F00f7be7d32240d70E586568` |
 | SimpleActionsFactory | `0xEE501087737570c780C3C219A0d3FFf2d86417a4` |
 | SimpleTransfersFactory | `0xC2E8c09Eb985Dd34285bc154D1B6886e6886aE54` |
+| UnsetEmergencyModeAction | `0x68e54338e31C7A8B7c46a2BB8Fd73f3a0606A506` |
+| SetGuardAction | `0xBD11e212A54a54020873D3027187c9e0d8896A7A` |
+| CanonGuardRegistry | `0x1d6f006964fBDf260B06cA38283Ec952B51f4f84` |
 
 ---
 
@@ -41,7 +44,6 @@ These factories are deployed via CREATE2 and share the same addresses across all
 | Contract | Address |
 | -------- | ------- |
 | SetGuardAction | [`0xfEc9e238b1E2cDde6d23e69d93979FA028E7a196`](https://etherscan.io/address/0xfEc9e238b1E2cDde6d23e69d93979FA028E7a196) |
-| UnsetEmergencyModeAction | [`0x717a3b40A5083a5a3245004D781e0A9Fe35d6812`](https://etherscan.io/address/0x717a3b40A5083a5a3245004D781e0A9Fe35d6812) |
 
 ---
 
