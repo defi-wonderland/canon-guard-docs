@@ -23,7 +23,7 @@ These are deployed via CREATE2 and share the same addresses across all supported
 | ChangeSafeGuardActionFactory | `0xE4Fd8EBFC17aA71b41E15143D35FCE6F48cB1a38` |
 | SetEmergencyCallerActionFactory | `0xDeA9DC1E5f5ac14A923A198349e3D175C3F8D175` |
 | SetEmergencyTriggerActionFactory | `0x701f4342800ddF69F00f7be7d32240d70E586568` |
-| SimpleActionsFactory | `0xEE501087737570c780C3C219A0d3FFf2d86417a4` |
+| ArbitraryActionsFactory | `0xD1F0e9D34B292E3EB27324F041f28929dBa41845` |
 | SimpleTransfersFactory | `0xC2E8c09Eb985Dd34285bc154D1B6886e6886aE54` |
 | UnsetEmergencyModeAction | `0x68e54338e31C7A8B7c46a2BB8Fd73f3a0606A506` |
 | SetGuardAction | `0xBD11e212A54a54020873D3027187c9e0d8896A7A` |
