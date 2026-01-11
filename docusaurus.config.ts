@@ -112,6 +112,10 @@ const config: Config = {
               label: 'Glossary',
               to: '/docs/concepts/glossary',
             },
+            {
+              label: 'Registry',
+              to: '/docs/getting-started/registry',
+            }
           ],
         },
         {
